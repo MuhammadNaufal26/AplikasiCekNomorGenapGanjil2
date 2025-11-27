@@ -25,6 +25,7 @@ public class CekNomorFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jOptionPane1 = new javax.swing.JOptionPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         tombolCek = new javax.swing.JButton();
@@ -35,6 +36,8 @@ public class CekNomorFrame extends javax.swing.JFrame {
         tombolKeluar = new javax.swing.JButton();
         tombolHapus = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        outputHasil2 = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Aplikasi Cek Nomor Ganjil Genap");
@@ -45,9 +48,20 @@ public class CekNomorFrame extends javax.swing.JFrame {
         jLabel2.setText("Masukkan Angka");
 
         tombolCek.setText("Cek");
+        tombolCek.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tombolCekActionPerformed(evt);
+            }
+        });
 
         inputAngka.setPreferredSize(new java.awt.Dimension(100, 25));
+        inputAngka.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                inputAngkaKeyTyped(evt);
+            }
+        });
 
+        outputHasil.setEditable(false);
         outputHasil.setPreferredSize(new java.awt.Dimension(100, 25));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -57,10 +71,25 @@ public class CekNomorFrame extends javax.swing.JFrame {
         jPanel2.add(jLabel1);
 
         tombolKeluar.setText("Keluar");
+        tombolKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tombolKeluarActionPerformed(evt);
+            }
+        });
 
         tombolHapus.setText("Hapus");
+        tombolHapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tombolHapusActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("2210010540 - Muhammad Naufal");
+
+        outputHasil2.setEditable(false);
+        outputHasil2.setPreferredSize(new java.awt.Dimension(100, 25));
+
+        jLabel4.setText("Bil. Prima?");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -85,7 +114,11 @@ public class CekNomorFrame extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(tombolCek)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(outputHasil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(outputHasil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(outputHasil2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(61, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -103,7 +136,11 @@ public class CekNomorFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tombolCek)
                     .addComponent(outputHasil, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(outputHasil2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tombolKeluar)
                     .addComponent(tombolHapus))
@@ -126,6 +163,77 @@ public class CekNomorFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void tombolCekActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombolCekActionPerformed
+        // TODO add your handling code here:
+         String input = inputAngka.getText();
+
+        // Jika kosong
+        if (input.isEmpty()) {
+            jOptionPane1.showMessageDialog(this,
+                "Input tidak boleh kosong!",
+                "Error",
+                jOptionPane1.ERROR_MESSAGE);
+            return;
+        } 
+        else {
+            // Cek apakah input angka valid
+            boolean hanyaAngka = input.matches("\\d+");
+
+            if (!hanyaAngka) {
+                outputHasil.setText("Harus angka!");
+            } 
+            else {
+                int angka = Integer.parseInt(input);
+
+                if (angka % 2 == 0) {
+                    outputHasil.setText("GENAP");
+                } else {
+                    outputHasil.setText("GANJIL");
+                }
+            }
+        }
+        
+        int angka = Integer.parseInt(input);
+        // Cek prima
+        boolean prima = true;
+
+        if (angka <= 1) {
+            prima = false;
+        } else {
+            for (int i = 2; i <= angka / 2; i++) {
+                if (angka % i == 0) {
+                    prima = false;
+                    break;
+                }
+            }
+        }
+
+        // Tampilkan hasil di TextField hasil
+        if (prima) {
+            outputHasil2.setText("IYA");
+        } else {
+            outputHasil2.setText("BUKAN");
+        }
+    }//GEN-LAST:event_tombolCekActionPerformed
+
+    private void tombolHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombolHapusActionPerformed
+        // TODO add your handling code here:
+        inputAngka.setText("");
+        outputHasil.setText("");
+        outputHasil2.setText("");
+        inputAngka.requestFocus();
+    }//GEN-LAST:event_tombolHapusActionPerformed
+
+    private void tombolKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombolKeluarActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_tombolKeluarActionPerformed
+
+    private void inputAngkaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_inputAngkaKeyTyped
+        // TODO add your handling code here:
+        if (!Character.isDigit(evt.getKeyChar())) evt.consume();
+    }//GEN-LAST:event_inputAngkaKeyTyped
 
     /**
      * @param args the command line arguments
@@ -167,9 +275,12 @@ public class CekNomorFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JOptionPane jOptionPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField outputHasil;
+    private javax.swing.JTextField outputHasil2;
     private javax.swing.JButton tombolCek;
     private javax.swing.JButton tombolHapus;
     private javax.swing.JButton tombolKeluar;
