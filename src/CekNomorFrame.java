@@ -14,6 +14,14 @@ public class CekNomorFrame extends javax.swing.JFrame {
      */
     public CekNomorFrame() {
         initComponents();
+        
+        // Menambahkan FocusListener pada JTextField
+        inputAngka.addFocusListener(new java.awt.event.FocusAdapter() {
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                inputAngka.setText(""); // Kosongkan saat diklik/fokus
+            }
+        });
     }
 
     /**
@@ -166,63 +174,56 @@ public class CekNomorFrame extends javax.swing.JFrame {
 
     private void tombolCekActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombolCekActionPerformed
         // TODO add your handling code here:
-         String input = inputAngka.getText();
-
-        // Jika kosong
-        if (input.isEmpty()) {
-            jOptionPane1.showMessageDialog(this,
-                "Input tidak boleh kosong!",
-                "Error",
-                jOptionPane1.ERROR_MESSAGE);
+        String strNomor = inputAngka.getText().trim();
+    
+        // 1. Validasi Input KOSONG (Hanya di sini JOptionPane muncul)
+        if (strNomor.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                "Input tidak boleh kosong!", "Peringatan", 
+                javax.swing.JOptionPane.WARNING_MESSAGE);
+            inputAngka.requestFocus();
             return;
-        } 
-        else {
-            // Cek apakah input angka valid
-            boolean hanyaAngka = input.matches("\\d+");
-
-            if (!hanyaAngka) {
-                outputHasil.setText("Harus angka!");
-            } 
-            else {
-                int angka = Integer.parseInt(input);
-
-                if (angka % 2 == 0) {
-                    outputHasil.setText("GENAP");
-                } else {
-                    outputHasil.setText("GANJIL");
-                }
-            }
-        }
-        
-        int angka = Integer.parseInt(input);
-        // Cek prima
-        boolean prima = true;
-
-        if (angka <= 1) {
-            prima = false;
-        } else {
-            for (int i = 2; i <= angka / 2; i++) {
-                if (angka % i == 0) {
-                    prima = false;
-                    break;
-                }
-            }
         }
 
-        // Tampilkan hasil di TextField hasil
-        if (prima) {
-            outputHasil2.setText("IYA");
-        } else {
-            outputHasil2.setText("BUKAN");
+        try {
+            // 2. Parsing Input (Sekali saja)
+            int angka = Integer.parseInt(strNomor);
+
+            // 3. Logika Cek Ganjil/Genap
+            String hasilGanjilGenap = (angka % 2 == 0) ? "Genap" : "Ganjil";
+            outputHasil.setText(hasilGanjilGenap);
+
+            // 4. Logika Cek Prima
+            if (isPrima(angka)) {
+                outputHasil2.setText("Prima");
+            } else {
+                outputHasil2.setText("Bukan");
+            }
+
+        } catch (NumberFormatException e) {
+            // Tambahan: Jika input bukan angka (misal huruf)
+            javax.swing.JOptionPane.showMessageDialog(this, 
+                "Masukkan angka yang valid!", "Error", 
+                javax.swing.JOptionPane.ERROR_MESSAGE);
+            inputAngka.setText("");
+            inputAngka.requestFocus();
         }
     }//GEN-LAST:event_tombolCekActionPerformed
+    // Fungsi helper untuk cek prima yang lebih akurat
+    private boolean isPrima(int n) {
+        if (n <= 1) return false; // 1 dan angka negatif bukan prima
+        for (int i = 2; i <= Math.sqrt(n); i++) {
+            if (n % i == 0) return false;
+        }
+        return true;
+    }
 
     private void tombolHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombolHapusActionPerformed
         // TODO add your handling code here:
         inputAngka.setText("");
         outputHasil.setText("");
         outputHasil2.setText("");
-        inputAngka.requestFocus();
+        inputAngka.requestFocus(); // Mengembalikan fokus
     }//GEN-LAST:event_tombolHapusActionPerformed
 
     private void tombolKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tombolKeluarActionPerformed
